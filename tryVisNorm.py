@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def visNormal(myArr,deleteOutlier=True,lineColor="k",histColor="k",nameOfData="original data",partNum=5,imgPath="normImg.jpg"):
+def visNormal(myArr,deleteOutlier=True,lineColor="k",histColor="k",nameOfData="original data",partNum=5):
     '''
     数据的正态分布对比图：
     ==============================================================
@@ -25,11 +25,10 @@ def visNormal(myArr,deleteOutlier=True,lineColor="k",histColor="k",nameOfData="o
     realMin=np.min(myArr)#get the minimum 获取最小值
     partItemScale=(realMax-realMin)/partNum#get the unit distance 获取间隔单位距离
     myArrCoor=np.array([[(realMin+i*partItemScale+realMin+(i+1)*partItemScale)/2,myArr[np.logical_and.reduce([myArr>=realMin+i*partItemScale,myArr<realMin+(i+1)*partItemScale])].size] for i in range(partNum)])#get the distribution of the coordinate data 获取原数据柱状分布
+    pltBar=plt.bar(x=myArrCoor[:,0],height=myArrCoor[:,1],width=(realMax-realMin)/partNum,color=histColor)#plot 输出柱状图
+    
     myMean=np.mean(myArr)#get the mean of original data 获取原数据均值
     myStd=np.std(myArr)#get the standard deviation of original data 获取原数据标准差
-    pltBar=plt.bar(x=myArrCoor[:,0],height=myArrCoor[:,1],width=int((realMax-realMin)/partNum),color=histColor)#plot 输出柱状图
-
-    
     normArr=np.random.normal(loc=myMean,scale=myStd,size=myArr.size)#get the data of normal distribution (ND)获取正态分布随机样本
     ndMin=np.min(normArr)#get the minimum of ND 获取随机样本最小值
     ndMax=np.max(normArr)#get the maxmum of ND 获取随机样本最大值
@@ -39,8 +38,6 @@ def visNormal(myArr,deleteOutlier=True,lineColor="k",histColor="k",nameOfData="o
     pltLine,=plt.plot(ndCoor[:,0],ndCoor[:,1],c=lineColor,linestyle="--")#plot 输出折线图
 
     plt.legend((pltBar, pltLine), (nameOfData, 'Normal Data'))#set legend 设定标注
-
-    plt.savefig(imgPath)#save the image
 
     return plt
     
